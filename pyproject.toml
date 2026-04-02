@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "lrc-tools"
+version = "0.1.0"
+description = "Terminal lyrics visualizer and LRC processing suite"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "brajanz" },
+]
+
+dependencies = [
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+full = [
+    "mutagen",
+    "syncedlyrics",
+]
+audio-tags = [
+    "mutagen",
+]
+
+[project.scripts]
+lrc-vis = "lrc_tools.lrc_vis_cli:main"
+lrc-fetch = "lrc_tools.lrc_puller_cli:main"
+lrc-processor = "lrc_tools.lrc_processor_cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
