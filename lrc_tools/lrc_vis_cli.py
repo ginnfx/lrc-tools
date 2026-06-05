@@ -24,6 +24,8 @@ def main():
                         help='Display refresh rate in seconds (default: 0.05)')
     parser.add_argument('--config', type=Path,
                         help='Path to config.yaml')
+    parser.add_argument('--offset', type=float, default=0.0,
+                    help='Timing offset in seconds (negative = show earlier)')
 
     args = parser.parse_args()
 
@@ -63,7 +65,8 @@ def main():
             audio_dir=args.audio_dir,
             is_wlrc=args.wlrc,
             font_data=font_data,
-            refresh_rate=args.refresh_rate
+            refresh_rate=args.refresh_rate,
+            offset=args.offset
         )
     except KeyboardInterrupt:
         print("\nExiting...")

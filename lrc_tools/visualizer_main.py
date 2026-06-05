@@ -63,13 +63,13 @@ def position_monitor(sync_data: SyncData, get_position_func, get_track_func, get
         expected_pos = actual_pos
         last_check = time.time()
 
-
 def run_visualizer(
     lrc_dir: Path,
     audio_dir: Optional[Path] = None,
     is_wlrc: bool = False,
     font_data: dict = None,
-    refresh_rate: float = 0.05
+    refresh_rate: float = 0.05,
+    offset: float = 0.0
 ):
     """Run the LRC visualizer main loop."""
     from .visualizer_player import get_position, get_track, get_status, get_audio_file_info
@@ -117,6 +117,7 @@ def run_visualizer(
                 continue
 
             sync_data.current_title = title
+            last_displayed = None
             lines = parse_lrc_simple(lrc)
             if not lines:
                 time.sleep(1)
@@ -167,20 +168,28 @@ def run_visualizer(
                             break
 
                     sync_data.should_resync = False
+                current_pos = get_position()
+                if current_pos is None:
+                    elapsed = time.time() - start_time
+                    current_pos = start_pos + elapsed + offset
+                else:
+                    current_pos += offset
 
-                elapsed = time.time() - start_time
-                current_pos = start_pos + elapsed
+                while idx + 1 < len(lines) and current_pos >= lines[idx + 1][0]:
+                    idx += 1
 
                 _, text = lines[idx]
-                display_text(text, use_block_letters=True, font_data=font_data, clear=True)
+                if text != last_displayed:
+                    display_text(text, use_block_letters=True, font_data=font_data, clear=True)
+                    last_displayed = text
 
                 if idx + 1 < len(lines):
                     next_start, _ = lines[idx + 1]
-                    if current_pos >= next_start:
-                        idx += 1
-                        continue
-
-                time.sleep(refresh_rate)
+                    wait = next_start - current_pos
+                    if wait > 0:
+                        time.sleep(min(wait, refresh_rate))
+                else:
+                    time.sleep(refresh_rate)
 
     except KeyboardInterrupt:
         pass
