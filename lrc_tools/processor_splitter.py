@@ -104,13 +104,13 @@ def split_phrase_intelligently(
     """
     words = text.split()
     
-    # Find all comma positions
+
     comma_splits = []
     for i, word in enumerate(words):
         if ',' in word:
             comma_splits.append(i + 1)  # Split after the comma word
     
-    # If we have commas and config allows, ALWAYS split at them
+   
     if comma_splits and split_on_commas:
         result = []
         word_idx = 0
@@ -140,7 +140,7 @@ def split_phrase_intelligently(
         
         return result
     
-    # No commas - only split if duration is too long
+    # No commas  only split if duration is too long
     if duration <= max_phrase_duration and len(words) <= max_words_per_phrase:
         return [{
             'timestamp': start_time,
