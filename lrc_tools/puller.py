@@ -50,9 +50,7 @@ _TRAILING_ARTIFACTS = [' 3', ' -3', ' _.', ' -.', ' -)', ' -c', ' 33']
 _QUALITY_TAGS = ['[FLAC]', '[MP3]', '[320]', '[256]', '[128]']
 
 
-# ---------------------------------------------------------------------------
-# Metadata extraction
-# ---------------------------------------------------------------------------
+
 
 def get_audio_metadata(filepath: Path) -> Optional[Dict[str, str]]:
     """
@@ -302,10 +300,6 @@ def search_song(
     except Exception:
         return {'status': 'error', 'song': song_info}
 
-
-# ---------------------------------------------------------------------------
-# Output
-# ---------------------------------------------------------------------------
 
 def resolve_output_path(
     filepath: Path,
